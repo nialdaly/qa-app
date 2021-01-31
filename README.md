@@ -1,5 +1,7 @@
-# QA (Question Answering) App
-A BERT-powered Question Answering application built with React.
+# QA App
+A BERT-powered Question Answering (QA) application built with React.
+
+## Getting Started
 
 A `config.js` file containing the API Gateway and Cognito details can be created at the root of the `src` directory. The `config.js` file should contain the following code:
 ```
@@ -18,3 +20,5 @@ const config = {
   
 export default config;
 ```
+
+## Additional Resources

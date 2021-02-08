@@ -3,12 +3,11 @@ A BERT-powered Question Answering (QA) application built with React. BERT which 
 
 In this project, we use a BERT model fine-tuned on the Stanford Question Answering Dataset (SQuAD) reading comprehension dataset. This model is capable of returning an answer when a *context* and *question* are provided. An example from the SQuAD2.0 dataset is shown below:
 
-<insContext</ins>
+<ins>Context</ins>
 Despite being relatively unaffected by the embargo, the UK nonetheless faced an oil crisis of its own - a series of strikes by coal miners and railroad workers over the winter of 1973–74 became a major factor in the change of government. Heath asked the British to heat only one room in their houses over the winter. The UK, Germany, Italy, Switzerland and Norway banned flying, driving and boating on Sundays. Sweden rationed gasoline and heating oil. The Netherlands imposed prison sentences for those who used more than their ration of electricity.
 
 <ins>Question</ins>
 Which country was not badly hit by the embargo?
-
 
 ## Getting Started
 A `config.js` file containing the API Gateway and Cognito details can be created at the root of the `src` directory. The `config.js` file should contain the following code:

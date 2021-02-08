@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Form, Card } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
 import { useFormFields } from "../libs/hooksLib";
@@ -12,13 +11,13 @@ export default function NewAnswer() {
     context: "",
     question: ""
   });
-
-  const history = useHistory();
+  const [answer, setAnswer] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   function validateForm() {
     return (
       fields.context.length > 0 &&
+      fields.context.length <= 1000 &&
       fields.question.length > 0
     );
   }
@@ -29,34 +28,42 @@ export default function NewAnswer() {
     setIsLoading(true);
 
     try {
-      const user = await Auth.currentAuthenticatedUser();
-      await callAPI(user);
-      history.push("/");
+      const authenticatedUser = await Auth.currentAuthenticatedUser();
+      const token = authenticatedUser.signInUserSession.idToken.jwtToken;
+
+      const requestData = {
+        headers: {
+          Authorization: token
+        },
+        body: {
+          context: fields.context,
+          question: fields.question
+        }
+      }
+
+      const answer = await API.post('getanswerapi', '/v1', requestData);
+      setIsLoading(false);
+      setAnswer(answer);
     } catch (e) {
       onError(e);
       setIsLoading(false);
     }
   }
 
-  async function callAPI(user) {
-    const token = user.signInUserSession.idToken.jwtToken
-    const requestData = {
-      headers: {
-        Authorization: token
-      },
-      body: {
-        context: fields.context,
-        question: fields.question
-      }
-    }
-    // console.log(data.body)
-    return await API.post('getanswerapi', '/v1', requestData);
+  function renderAnswerValue() {
+    return (
+      <div className="text-center">
+        <p></p>
+        <Card bg="success" text="white">
+          <Card.Body>{answer.body}</Card.Body>
+        </Card>
+      </div>
+    )
   }
 
-  function getAnswer() {
-    console.log("hey");
+  function renderAnswerNull() {
     return (
-      <div className="answer">
+      <div className="text-center">
         <p></p>
         <Card>
           <Card.Body></Card.Body>
@@ -94,7 +101,7 @@ export default function NewAnswer() {
           Get answer
         </LoaderButton>
       </Form>
-      {getAnswer()}
+      {answer === null ? renderAnswerNull() : renderAnswerValue()}
     </div>
   );
 }
